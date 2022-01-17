@@ -1,0 +1,91 @@
+// CPP program for the above approach
+#include <bits/stdc++.h>
+using namespace std;
+#define nl "\n"
+class Node {
+public:
+	int data;
+	Node* left;
+	Node* right;
+	Node(int value) { data = value; }
+};
+
+/
+void inorder(Node* temp)
+{
+	if (temp == NULL)
+		return;
+
+	inorder(temp->left);
+	cout << temp->data << " ";
+	inorder(temp->right);
+}
+
+
+void reverseTreePathUtil(Node* root, vector<Node*> path,
+						int pathLen, int key)
+{
+	
+	if (root == NULL)
+		return;
+
+	
+	path[pathLen] = root;
+	pathLen++;
+
+	
+	if (root->data == key) {
+	
+		// Current path array contains
+		// the path which needs
+		// to be reversed
+		int i = 0, j = pathLen - 1;
+	
+		// Swap the data of two nodes
+		while (i < j) {
+			int temp = path[i]->data;
+			path[i]->data = path[j]->data;
+			path[j]->data = temp;
+			i++;
+			j--;
+		}
+	}
+
+	if (!root->left and !root->right)
+		return;
+	
+	
+	reverseTreePathUtil(root->left, path,
+							pathLen, key);
+	reverseTreePathUtil(root->right, path,
+							pathLen, key);
+}
+
+// Function to reverse tree path
+void reverseTreePath(Node* root, int key)
+{
+	if (root == NULL)
+		return;
+
+	// Initialize a vector to store paths
+	vector<Node*> path(50, NULL);
+	reverseTreePathUtil(root, path, 0, key);
+}
+
+// Driver Code
+int main()
+{
+	Node* root = new Node(7);
+	root->left = new Node(6);
+	root->right = new Node(5);
+	root->left->left = new Node(4);
+	root->left->right = new Node(3);
+	root->right->left = new Node(2);
+	root->right->right = new Node(1);
+
+	
+	int key = 4;
+	reverseTreePath(root, key);
+	inorder(root);
+	return 0;
+}
